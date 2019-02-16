@@ -9,11 +9,9 @@ const { extractAudioFromUrl } = require('../core/extractor');
 const { getFiles, saveFiles, addAuthenticatedSlackTeam } = require('../core/store');
 const { streamResponseFile } = require('../middlewares/stream');
 
-const audioStorePath = resolve(__dirname, '../../data/audio');
-
-const getFileForUrl = async (url) => {
+const getFileForUrl = async (url, app) => {
   // check if file already exists
-  const files = await getFiles();
+  const files = await getFiles(app.get('database'));
   let file = files.find((file) => file.url === url);
   if (file) {
     return file;
@@ -26,12 +24,12 @@ const getFileForUrl = async (url) => {
   };
 
   // extract audio from url without waiting for the response
-  extractAudioFromUrl(url, file.id);
+  extractAudioFromUrl(url, file.id, app.get('filesStorage'));
 
   // save new file ref
   files.push(file);
   try {
-    await saveFiles(files);
+    await saveFiles(app.get('database'), files);
   } catch (err) {
     return new GeneralError(err);
   }
@@ -43,7 +41,7 @@ module.exports = function (app) {
   app.use('slack-oauth-slack-button', {
     async find({ query }) {
       const slackConfig = app.get('slack');
-      if (query.state !== slackConfig.slackButtonState) {
+      if (slackConfig.slackButtonState && (query.state !== slackConfig.slackButtonState)) {
         return new Forbidden('Slack Button state is invalid');
       }
 
@@ -74,7 +72,7 @@ module.exports = function (app) {
         return new GeneralError(data.error);
       }
 
-      await addAuthenticatedSlackTeam({
+      await addAuthenticatedSlackTeam(app.get('database'), {
         id: data.team_id,
         name: data.team_name,
         userId: data.user_id,
@@ -94,13 +92,14 @@ module.exports = function (app) {
         return new BadRequest('Missing required query params "url"');
       }
 
-      return await getFileForUrl(url);
+      return await getFileForUrl(url, app);
     },
   });
 
   app.use('slack-command', {
     async create({ token, text, response_url, user_name }) {
-      if (token !== app.get('slack').verificationToken) {
+      const slackConfig = app.get('slack');
+      if (slackConfig.verificationToken && (token !== slackConfig.verificationToken)) {
         return new Forbidden('Slack verification token is invalid');
       }
 
@@ -127,7 +126,7 @@ Examples:
         };
       }
 
-      const { id } = await getFileForUrl(matchedParams[1]);
+      const { id } = await getFileForUrl(matchedParams[1], app);
       const difficulty = matchedParams[2] || matchedParams[3];
       const date = matchedParams[4] || matchedParams[5];
       const streamUrl = `${app.get('realBaseUrl')}/stream/${id}`;
@@ -174,17 +173,17 @@ Examples:
 
   app.use('stream', {
     async get(id) {
-      const file = (await getFiles()).find((file) => file.id === id);
+      const file = (await getFiles(app.get('database'))).find((file) => file.id === id);
       if (!file) {
         return new NotFound(`No file corresponding to "${id}"`);
       }
 
       const fileName = `${id}.mp3`;
-      if (!existsSync(resolve(audioStorePath, fileName))) {
+      if (!existsSync(resolve(app.get('filesStorage').filesystem.path, fileName))) {
         return new Unavailable('The audio file is being extracted and should be available within a few seconds');
       }
 
       return fileName;
     },
-  }, streamResponseFile);
+  }, streamResponseFile(app.get('filesStorage')));
 };

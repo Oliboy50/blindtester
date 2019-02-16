@@ -5,21 +5,19 @@ const fs = require('fs');
 const readFile = promisify(fs.readFile);
 const writeFile = promisify(fs.writeFile);
 
-const databasePath = path.resolve(__dirname, '../../data/database.json');
-
 const DATABASE_KEY_FILES = 'files';
 const DATABASE_DEFAULT_FILES = [];
 const DATABASE_KEY_AUTHENTICATED_SLACK_TEAMS = 'authenticatedSlackTeams';
 const DATABASE_DEFAULT_AUTHENTICATED_SLACK_TEAMS = [];
 
-const getDatabase = async () => {
+const getDatabase = async (databaseConfig) => {
   const defaultDatabase = {
     [DATABASE_KEY_FILES]: DATABASE_DEFAULT_FILES,
     [DATABASE_KEY_AUTHENTICATED_SLACK_TEAMS]: DATABASE_DEFAULT_AUTHENTICATED_SLACK_TEAMS,
   };
   let database;
   try {
-    database = JSON.parse(await readFile(databasePath));
+    database = JSON.parse(await readFile(databaseConfig.filesystem.path));
     if (!database) {
       return defaultDatabase;
     }
@@ -30,22 +28,22 @@ const getDatabase = async () => {
   return database;
 };
 
-const assignDataToDatabase = async (data) => {
-  mkdirp(path.dirname(databasePath), async (err) => {
+const assignDataToDatabase = async (databaseConfig, data) => {
+  mkdirp(path.dirname(databaseConfig.filesystem.path), async (err) => {
     if (err) {
       throw err;
     }
 
-    await writeFile(databasePath, JSON.stringify(
-      Object.assign({}, await getDatabase(), data),
+    await writeFile(databaseConfig.filesystem.path, JSON.stringify(
+      Object.assign({}, await getDatabase(databaseConfig), data),
       null,
       2
     ));
   });
 };
 
-const getFiles = async () => {
-  const database = await getDatabase();
+const getFiles = async (databaseConfig) => {
+  const database = await getDatabase(databaseConfig);
   if (!database[DATABASE_KEY_FILES] || !Array.isArray(database[DATABASE_KEY_FILES])) {
     return DATABASE_DEFAULT_FILES;
   }
@@ -53,14 +51,14 @@ const getFiles = async () => {
   return database[DATABASE_KEY_FILES];
 };
 
-const saveFiles = async (files) => {
-  await assignDataToDatabase({
+const saveFiles = async (databaseConfig, files) => {
+  await assignDataToDatabase(databaseConfig, {
     [DATABASE_KEY_FILES]: files,
   });
 };
 
-const getAuthenticatedSlackTeams = async () => {
-  const database = await getDatabase();
+const getAuthenticatedSlackTeams = async (databaseConfig) => {
+  const database = await getDatabase(databaseConfig);
   if (!database[DATABASE_KEY_AUTHENTICATED_SLACK_TEAMS] || !Array.isArray(database[DATABASE_KEY_AUTHENTICATED_SLACK_TEAMS])) {
     return DATABASE_DEFAULT_AUTHENTICATED_SLACK_TEAMS;
   }
@@ -68,10 +66,10 @@ const getAuthenticatedSlackTeams = async () => {
   return database[DATABASE_KEY_AUTHENTICATED_SLACK_TEAMS];
 };
 
-const addAuthenticatedSlackTeam = async (team) => {
+const addAuthenticatedSlackTeam = async (databaseConfig, team) => {
   const teams = await getAuthenticatedSlackTeams();
   teams.push(team);
-  await assignDataToDatabase({
+  await assignDataToDatabase(databaseConfig, {
     [DATABASE_KEY_AUTHENTICATED_SLACK_TEAMS]: teams,
   });
 };

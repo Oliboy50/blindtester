@@ -2,17 +2,19 @@ const { resolve } = require('path');
 const { createReadStream } = require('fs');
 
 module.exports = {
-  streamResponseFile(req, res, next) {
-    // Supports only string data
-    if (typeof res.data !== 'string') {
-      next();
-      return;
-    }
+  streamResponseFile(filesStorageConfig) {
+    return (req, res, next) => {
+      // Supports only string data
+      if (typeof res.data !== 'string') {
+        next();
+        return;
+      }
 
-    res.set('Content-Type', 'audio/mpeg');
+      res.set('Content-Type', 'audio/mpeg');
 
-    createReadStream(
-      resolve(__dirname, '../../data/audio', res.data)
-    ).pipe(res);
+      createReadStream(
+        resolve(filesStorageConfig.filesystem.path, res.data)
+      ).pipe(res);
+    };
   },
 };

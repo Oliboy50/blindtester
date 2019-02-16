@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  api:
+    environment:
+      PORT: 3030
+      NODE_APP_DIR: /home/node/app
+      NODE_ENV: development
+      API_BASE_URL: http://localhost:3030
+      DATABASE_TYPE: filesystem
+      DATABASE_FILESYSTEM_PATH: /home/node/app/data/database.json
+      FILES_STORAGE_TYPE: filesystem
+      FILES_STORAGE_FILESYSTEM_PATH: /home/node/app/data/audio
+      SLACK_CLIENT_ID: $SLACK_CLIENT_ID
+      SLACK_CLIENT_SECRET: $SLACK_CLIENT_SECRET
+      SLACK_VERIFICATION_TOKEN: $SLACK_VERIFICATION_TOKEN
+      SLACK_SLACK_BUTTON_STATE: $SLACK_SLACK_BUTTON_STATE
+    ports:
+      - '3030:3030'
+    command: npm run dev
+    volumes:
+      - ./api:/home/node/app
+      - api:/home/node/app/node_modules:delegated
+
+volumes:
+  api:
