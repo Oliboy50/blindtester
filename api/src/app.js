@@ -1,17 +1,11 @@
 const compress = require('compression');
 const cors = require('cors');
 const helmet = require('helmet');
-
 const feathers = require('@feathersjs/feathers');
-const configuration = require('@feathersjs/configuration');
 const express = require('@feathersjs/express');
-
 const services = require('./services');
 
 const app = express(feathers());
-
-// Load app configuration
-app.configure(configuration());
 
 // Enable CORS, security, compression and body parsing
 app.use(cors());
