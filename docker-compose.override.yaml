@@ -1,0 +1,22 @@
+version: '3.6'
+
+services:
+  api:
+    environment:
+      PORT: 3030
+      NODE_APP_DIR: /home/node/app
+      NODE_ENV: development
+      API_BASE_URL: http://localhost:$$PORT
+      SLACK_VERIFICATION_TOKEN: $SLACK_VERIFICATION_TOKEN
+      SLACK_SLACK_BUTTON_STATE: $SLACK_SLACK_BUTTON_STATE
+      SLACK_CLIENT_ID: $SLACK_CLIENT_ID
+      SLACK_CLIENT_SECRET: $SLACK_CLIENT_SECRET
+    ports:
+      - '3030:3030'
+    command: npm run dev
+    volumes:
+      - ./api:/home/node/app
+      - api:/home/node/app/node_modules:delegated
+
+volumes:
+  api:
