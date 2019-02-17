@@ -8,8 +8,22 @@ if (process.env.DATABASE_TYPE === DATABASE_TYPE_JSON && ![DATABASE_JSON_TYPE_FIL
   throw new Error('Invalid "DATABASE_JSON_TYPE" environment variable value');
 }
 
-if (process.env.DATABASE_TYPE === DATABASE_TYPE_JSON && !process.env.DATABASE_JSON_FILESYSTEM_PATH) {
+if (process.env.DATABASE_JSON_TYPE === DATABASE_JSON_TYPE_FILESYSTEM && !process.env.DATABASE_JSON_FILESYSTEM_PATH) {
   throw new Error('Invalid "DATABASE_JSON_FILESYSTEM_PATH" environment variable value');
+}
+
+if (process.env.DATABASE_JSON_TYPE === DATABASE_JSON_TYPE_BACKBLAZEB2) {
+  if (!process.env.DATABASE_JSON_BACKBLAZEB2_KEY_ID) {
+    throw new Error('Invalid "DATABASE_JSON_BACKBLAZEB2_KEY_ID" environment variable value');
+  }
+
+  if (!process.env.DATABASE_JSON_BACKBLAZEB2_APPLICATION_KEY) {
+    throw new Error('Invalid "DATABASE_JSON_BACKBLAZEB2_APPLICATION_KEY" environment variable value');
+  }
+
+  if (!process.env.DATABASE_JSON_BACKBLAZEB2_BUCKET_ID) {
+    throw new Error('Invalid "DATABASE_JSON_BACKBLAZEB2_BUCKET_ID" environment variable value');
+  }
 }
 
 module.exports = {

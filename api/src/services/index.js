@@ -9,7 +9,7 @@ module.exports = function (app) {
     app.configure(require('./stream'));
   }
 
-  if (config.slack.enabled) {
+  if (config.endpoint.slack.enabled) {
     app.configure(require('./slack'));
   }
 };
