@@ -1,5 +1,7 @@
 module.exports = {
-  DATABASE_TYPE_FILESYSTEM: 'filesystem',
+  DATABASE_TYPE_JSON: 'json',
+  DATABASE_JSON_TYPE_FILESYSTEM: 'filesystem',
+  DATABASE_JSON_TYPE_BACKBLAZEB2: 'backblazeb2',
   FILES_STORAGE_TYPE_FILESYSTEM: 'filesystem',
   FILES_STORAGE_TYPE_BACKBLAZEB2: 'backblazeb2',
 };

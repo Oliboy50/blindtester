@@ -9,8 +9,9 @@ services:
       API_BASE_URL: http://localhost:3030
       ENDPOINT_SAVE_ENABLED: 'true'
       ENDPOINT_STREAM_ENABLED: 'true'
-      DATABASE_TYPE: filesystem
-      DATABASE_FILESYSTEM_PATH: /home/node/app/data/database.json
+      DATABASE_TYPE: json
+      DATABASE_JSON_TYPE: filesystem
+      DATABASE_JSON_FILESYSTEM_PATH: /home/node/app/data/database.json
       FILES_STORAGE_TYPE: filesystem
       FILES_STORAGE_FILESYSTEM_PATH: /home/node/app/data/audio
       FILES_STORAGE_BACKBLAZEB2_KEY_ID: $FILES_STORAGE_BACKBLAZEB2_KEY_ID

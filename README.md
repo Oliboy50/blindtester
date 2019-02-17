@@ -15,8 +15,9 @@ Configuration is done using environment variables (some good defaults can be fou
 | API_BASE_URL | WebApp base URL displayed to end users |
 | ENDPOINT_SAVE_ENABLED | If equals to `true`, the API will expose the `save` endpoint |
 | ENDPOINT_STREAM_ENABLED | If equals to `true`, the API will expose the `stream` endpoint |
-| DATABASE_TYPE | Database type. Could be one of `filesystem` |
-| DATABASE_FILESYSTEM_PATH | Used if `DATABASE_TYPE` is `filesystem`. Path to a readable/writable file which will be created (if it does not already exist) and used as a single JSON object to store application data |
+| DATABASE_TYPE | Database type. Could be one of `json` |
+| DATABASE_JSON_TYPE | Database JSON type. Could be one of `filesystem` |
+| DATABASE_JSON_FILESYSTEM_PATH | Used if `DATABASE_TYPE` is `json`. Path to a readable/writable file which will be created (if it does not already exist) and used as a single JSON object to store application data |
 | FILES_STORAGE_TYPE | Files storage type. Could be one of `filesystem`, `backblazeb2` |
 | FILES_STORAGE_FILESYSTEM_PATH | Path to a readable/writable directory which will be created (if it does not already exist) and used to store extracted audio files |
 | FILES_STORAGE_BACKBLAZEB2_KEY_ID | Used if `FILES_STORAGE_TYPE` is `backblazeb2`. Backblaze B2 key ID used to access the bucket. More information: [b2_authorize_account](https://www.backblaze.com/b2/docs/b2_authorize_account.html) |
