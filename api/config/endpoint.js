@@ -5,4 +5,7 @@ module.exports = {
   stream: {
     enabled: process.env.ENDPOINT_STREAM_ENABLED === 'true',
   },
+  slack: {
+    enabled: process.env.ENDPOINT_SLACK_ENABLED === 'true',
+  },
 };

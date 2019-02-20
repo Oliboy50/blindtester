@@ -11,8 +11,8 @@
     "npm": "6.8.0"
   },
   "scripts": {
-    "start": "node src/",
-    "dev": "nodemon src/",
+    "start": "NODE_ENV=production node src/",
+    "dev": "NODE_ENV=development nodemon src/",
     "lint": "eslint .",
     "lint:fix": "eslint --fix ."
   },
@@ -24,6 +24,7 @@
     "compression": "^1.7.3",
     "cors": "^2.8.5",
     "helmet": "^3.15.1",
+    "memory-cache": "^0.2.0",
     "mkdirp": "^0.5.1",
     "uniqid": "^5.0.3"
   },

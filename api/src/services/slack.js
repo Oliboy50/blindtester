@@ -6,7 +6,7 @@ const { addAuthenticatedSlackTeam } = require('../core/database');
 const { getFileDataForUrl } = require('../core/fileFinder');
 
 module.exports = function (app) {
-  app.use('slack-oauth-slack-button', {
+  app.use('/slack-oauth-slack-button', {
     async find({ query }) {
       if (config.slack.slackButtonState && (query.state !== config.slack.slackButtonState)) {
         return new Forbidden('Slack Button state is invalid');
@@ -52,7 +52,7 @@ module.exports = function (app) {
     },
   });
 
-  app.use('slack-command', {
+  app.use('/slack-command', {
     async create({ token, text, response_url, user_name }) {
       if (config.slack.verificationToken && (token !== config.slack.verificationToken)) {
         return new Forbidden('Slack verification token is invalid');

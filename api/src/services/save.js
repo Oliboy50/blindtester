@@ -2,7 +2,7 @@ const { BadRequest } = require('@feathersjs/errors');
 const { getFileDataForUrl } = require('../core/fileFinder');
 
 module.exports = function (app) {
-  app.use('save', {
+  app.use('/save', {
     async find({ query }) {
       const url = query.url;
       if (!url) {

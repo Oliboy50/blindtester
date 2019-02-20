@@ -5,29 +5,34 @@ services:
     environment:
       PORT: 3030
       NODE_APP_DIR: /home/node/app
-      NODE_ENV: development
       API_BASE_URL: http://localhost:3030
       ENDPOINT_SAVE_ENABLED: 'true'
       ENDPOINT_STREAM_ENABLED: 'true'
+      ENDPOINT_SLACK_ENABLED: 'false'
       DATABASE_TYPE: json
       DATABASE_JSON_TYPE: filesystem
       DATABASE_JSON_FILESYSTEM_PATH: /home/node/app/data/database.json
+      DATABASE_JSON_BACKBLAZEB2_KEY_ID: $DATABASE_JSON_BACKBLAZEB2_KEY_ID
+      DATABASE_JSON_BACKBLAZEB2_APPLICATION_KEY: $DATABASE_JSON_BACKBLAZEB2_APPLICATION_KEY
+      DATABASE_JSON_BACKBLAZEB2_BUCKET_ID: $DATABASE_JSON_BACKBLAZEB2_BUCKET_ID
+      DATABASE_JSON_BACKBLAZEB2_BUCKET_NAME: $DATABASE_JSON_BACKBLAZEB2_BUCKET_NAME
+      DATABASE_JSON_BACKBLAZEB2_FILE_NAME: $DATABASE_JSON_BACKBLAZEB2_FILE_NAME
       FILES_STORAGE_TYPE: filesystem
       FILES_STORAGE_FILESYSTEM_PATH: /home/node/app/data/audio
       FILES_STORAGE_BACKBLAZEB2_KEY_ID: $FILES_STORAGE_BACKBLAZEB2_KEY_ID
       FILES_STORAGE_BACKBLAZEB2_APPLICATION_KEY: $FILES_STORAGE_BACKBLAZEB2_APPLICATION_KEY
       FILES_STORAGE_BACKBLAZEB2_BUCKET_ID: $FILES_STORAGE_BACKBLAZEB2_BUCKET_ID
-      SLACK_ENABLED: 'false'
       SLACK_CLIENT_ID: $SLACK_CLIENT_ID
       SLACK_CLIENT_SECRET: $SLACK_CLIENT_SECRET
       SLACK_VERIFICATION_TOKEN: $SLACK_VERIFICATION_TOKEN
       SLACK_SLACK_BUTTON_STATE: $SLACK_SLACK_BUTTON_STATE
     ports:
       - '3030:3030'
-    command: npm run dev
-    volumes:
-      - ./api:/home/node/app
-      - api:/home/node/app/node_modules:delegated
-
-volumes:
-  api:
+#    build:
+#      args:
+#        SET_DEVELOPMENT_NODE_ENV: 1
+#    command: npm run dev
+#    volumes:
+#      - ./api/src:/home/node/app/src
+#      - ./api/config:/home/node/app/config
+#      - ./api/data:/home/node/app/data
