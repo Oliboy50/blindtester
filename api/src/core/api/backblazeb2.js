@@ -19,8 +19,23 @@ module.exports = {
       console.log(`"b2_authorize_account" failed`, e);
       throw new Error(`"b2_authorize_account" failed`);
     }
-
     return authorizeAccountData;
+  },
+  async downloadFileByName(downloadUrl, bucketName, fileName) {
+    let downloadFileByNameData;
+    try {
+      downloadFileByNameData = (await axios.get(
+        `${downloadUrl}/file/${bucketName}/${fileName}`,
+      )).data;
+    } catch (e) {
+      if (e.response && e.response.status === 404) {
+        return null;
+      }
+      // eslint-disable-next-line no-console
+      console.log(`"b2_download_file_by_name" failed`, e);
+      throw new Error(`"b2_download_file_by_name" failed`);
+    }
+    return downloadFileByNameData;
   },
   async getUploadUrl(apiUrl, authorizationToken, bucketId) {
     let getUploadUrlData;
@@ -41,10 +56,9 @@ module.exports = {
       console.log(`"b2_get_upload_url" failed`, e);
       throw new Error(`"b2_get_upload_url" failed`);
     }
-
     return getUploadUrlData;
   },
-  async upload(uploadUrl, authorizationToken, fileBuffer, fileName) {
+  async upload(uploadUrl, authorizationToken, fileBuffer, fileName, fileContentType = 'b2/x-auto') {
     let uploadData;
     try {
       uploadData = (await axios.post(
@@ -54,7 +68,7 @@ module.exports = {
           headers: {
             Authorization: authorizationToken,
             'X-Bz-File-Name': fileName,
-            'Content-Type': 'audio/mpeg',
+            'Content-Type': fileContentType,
             'X-Bz-Content-Sha1': await getSha1FromBuffer(fileBuffer),
           },
         },
@@ -64,7 +78,6 @@ module.exports = {
       console.log(`b2 file upload failed`, e);
       throw new Error(`b2 file upload failed`);
     }
-
     return uploadData;
   },
 };
