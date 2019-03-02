@@ -2,6 +2,8 @@
 
 > Send a video URL (e.g. YouTube) => Get a blindtest
 
+[![CircleCI](https://circleci.com/gh/Oliboy50/blindtester.svg?style=svg)](https://circleci.com/gh/Oliboy50/blindtester)
+
 ## User documentation
 
 ### Install
