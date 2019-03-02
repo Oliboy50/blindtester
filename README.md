@@ -16,6 +16,14 @@ cp docker-compose.local.yaml docker-compose.override.yaml
 docker-compose up
 ```
 
+#### Heroku
+
+1. Create a new app on heroku (e.g. `MY_APP`)
+1. `heroku login`
+1. `heroku stack:set container --app MY_APP`
+1. `heroku git:remote --app MY_APP`
+1. `git push heroku master`
+
 ### Configuration
 
 Configuration is done using environment variables (some good defaults can be found in [docker-compose.local.yaml](docker-compose.local.yaml)) which are listed below:
