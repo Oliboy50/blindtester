@@ -1,3 +1,5 @@
 build:
   docker:
     web: api/Dockerfile
+  config:
+    SET_NPM_UNSAFE_PERM_TRUE: 1
