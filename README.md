@@ -11,7 +11,7 @@
 #### Local
 
 1. `cp docker-compose.local.yaml docker-compose.override.yaml`
-1. Edit `docker-compose.override.yaml` file to setup your environment variables and comment the last lines of the file if you want to run in "production" environment
+1. Edit `docker-compose.override.yaml` file to setup your environment variables
 1. `docker-compose up`
 1. Go to http://localhost:3030 to make sure blindtester is up and running
 
@@ -61,7 +61,7 @@ Configuration is done using environment variables (some good defaults can be fou
 ```shell
 cp docker-compose.local.yaml docker-compose.override.yaml
 
-# edit docker-compose.override.yaml file to setup your environment variables
+# edit docker-compose.override.yaml file to setup your environment variables and uncomment the last lines of the file to run in "development" environment
 
 docker-compose up
 ```

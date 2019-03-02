@@ -6,11 +6,13 @@ jobs:
       - image: docker/compose:1.23.2
     steps:
       - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
       - run:
           name: install
           command: |
-            cp docker-compose.local.yaml docker-compose.override.yaml
-            docker-compose up -d
+            docker-compose -f docker-compose.yaml -f docker-compose.local.yaml -f docker-compose.ci.yaml up -d
       - run:
           name: lint
-          command: docker-compose exec api npm run lint
+          command: |
+            docker-compose exec api npm run lint
