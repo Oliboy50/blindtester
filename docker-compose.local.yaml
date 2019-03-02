@@ -28,11 +28,14 @@ services:
       SLACK_SLACK_BUTTON_STATE: $SLACK_SLACK_BUTTON_STATE
     ports:
       - '3030:3030'
-#    build:
-#      args:
-#        SET_DEVELOPMENT_NODE_ENV: 1
-#    command: npm run dev
-#    volumes:
-#      - ./api/src:/home/node/app/src
-#      - ./api/config:/home/node/app/config
-#      - ./api/data:/home/node/app/data
+
+    # you can comment all the remaining lines below if you want to run in "production" environment
+
+    build:
+      args:
+        SET_DEVELOPMENT_NODE_ENV: 1
+    command: npm run dev
+    volumes:
+      - ./api/src:/home/node/app/src
+      - ./api/config:/home/node/app/config
+      - ./api/data:/home/node/app/data
