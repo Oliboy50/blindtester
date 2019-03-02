@@ -5,7 +5,7 @@ const slack = require('./slack');
 
 module.exports = {
   port: process.env.PORT,
-  realBaseUrl: process.env.API_BASE_URL,
+  apiBaseUrl: process.env.API_BASE_URL,
   endpoint,
   database,
   filesStorage,

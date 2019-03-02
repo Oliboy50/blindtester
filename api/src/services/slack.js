@@ -2,6 +2,7 @@ const { stringify } = require('querystring');
 const { BadRequest, Forbidden, GeneralError } = require('@feathersjs/errors');
 const axios = require('axios');
 const config = require('../../config');
+const { FILES_STORAGE_TYPE_BACKBLAZEB2 } = require('../../config/const');
 const { addAuthenticatedSlackTeam } = require('../core/database');
 const { getFileDataForUrl } = require('../core/fileFinder');
 
@@ -58,19 +59,24 @@ module.exports = function (app) {
         return new Forbidden('Slack verification token is invalid');
       }
 
-      const matchedParams = text.match(
-        new RegExp([
-          /^/,
-          /<((?:https?:\/\/)?(?:(?:www\.)?youtube\.com|youtu\.?be)\/.+)>/, // required url
-          /(?: (?:"(.*?)"|(\S+)))?/, // optional difficulty
-          /(?: (?:"(.*?)"|(\S+)))?/, // optional date
-          /$/,
-        ].map(r => r.source).join(''))
-      );
+      // @TODO support something else than YouTube
+      let matchedParams;
+      try {
+        matchedParams = text.match(
+          new RegExp([
+            /^/,
+            /<((?:https?:\/\/)?(?:(?:www\.)?youtube\.com|youtu\.?be)\/.+)>/, // required url
+            /(?: (?:"(.*?)"|(\S+)))?/, // optional difficulty
+            /(?: (?:"(.*?)"|(\S+)))?/, // optional date
+            /$/,
+          ].map(r => r.source).join(''))
+        );
+      } catch (e) {} // eslint-disable-line no-empty
+
       if(!matchedParams || !matchedParams[1]) {
         return {
           response_type: 'ephemeral',
-          text: `Sorry, I didn't understand. Please paste a YouTube video URL and optionally include difficulty and/or date information.
+          text: `Paste a YouTube video URL and optionally include difficulty and/or date information.
 Examples:
 /blindtest https://www.youtube.com/watch?v=dQw4w9WgXcQ
 /blindtest https://www.youtube.com/watch?v=dQw4w9WgXcQ :egg: 1992
@@ -81,36 +87,44 @@ Examples:
         };
       }
 
-      const { id } = await getFileDataForUrl(matchedParams[1], app);
-      const difficulty = matchedParams[2] || matchedParams[3];
-      const date = matchedParams[4] || matchedParams[5];
-      const streamUrl = `${config.realBaseUrl}/stream/${id}`;
+      getFileDataForUrl(matchedParams[1]).then((file) => {
+        const difficulty = matchedParams[2] || matchedParams[3];
+        const date = matchedParams[4] || matchedParams[5];
 
-      // send response to response_url to avoid showing original slash command message
-      axios.post(response_url, {
-        response_type: 'in_channel',
-        attachments: [
-          {
-            color: '#11aadd',
-            author_name: `<@${user_name}> just slacked a new blind test`,
-            title: ':point_right: CLICK HERE TO LISTEN :point_left:',
-            title_link: streamUrl,
-            fields: [
-              ...(difficulty ? [{
-                title: 'Difficulty',
-                value: difficulty,
-                short: true,
-              }] : []),
-              ...(date ? [{
-                title: 'Date',
-                value: date,
-                short: true,
-              }] : []),
-            ],
-            footer: 'please answer in thread to avoid spoiling everyone',
-            fallback: `NEW BLIND TEST -> ${streamUrl}`,
-          },
-        ],
+        // always prefer file.url instead of stream
+        let urlToAudioFile;
+        if (file.type === FILES_STORAGE_TYPE_BACKBLAZEB2) {
+          urlToAudioFile = file.url;
+        } else {
+          urlToAudioFile = `${config.apiBaseUrl}/stream/${file.id}`;
+        }
+
+        // send response to response_url to avoid showing original slash command message
+        axios.post(response_url, {
+          response_type: 'in_channel',
+          attachments: [
+            {
+              color: '#11aadd',
+              author_name: `<@${user_name}> just slacked a new blind test`,
+              title: ':point_right: CLICK HERE TO LISTEN :point_left:',
+              title_link: urlToAudioFile,
+              fields: [
+                ...(difficulty ? [{
+                  title: 'Difficulty',
+                  value: difficulty,
+                  short: true,
+                }] : []),
+                ...(date ? [{
+                  title: 'Date',
+                  value: date,
+                  short: true,
+                }] : []),
+              ],
+              footer: 'please answer in thread to avoid spoiling everyone',
+              fallback: `NEW BLIND TEST -> ${urlToAudioFile}`,
+            },
+          ],
+        });
       });
 
       // send back ephemeral response to remove original slash command message
@@ -119,7 +133,7 @@ Examples:
         attachments: [
           {
             color: 'good',
-            text: 'Blind test successfully created',
+            text: `Success! I'll post back this blind test in a few seconds :)`,
           },
         ],
       };
