@@ -8,6 +8,11 @@ jobs:
       - checkout
       - setup_remote_docker:
           docker_layer_caching: true
-      - cp docker-compose.local.yaml docker-compose.override.yaml
-      - docker-compose up -d
-      - docker-compose exec api npm run lint
+      - run:
+          name: install
+          command: |
+            cp docker-compose.local.yaml docker-compose.override.yaml
+            docker-compose up -d
+      - run:
+          name: lint
+          command: docker-compose exec api npm run lint
