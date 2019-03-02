@@ -4,25 +4,24 @@
 
 ## User documentation
 
-### Usage
+### Install
 
 #### Local
 
-```shell
-cp docker-compose.local.yaml docker-compose.override.yaml
-
-# edit docker-compose.override.yaml file to fit your need (see "Configuration" section)
-
-docker-compose up
-```
+1. `cp docker-compose.local.yaml docker-compose.override.yaml`
+1. Edit `docker-compose.override.yaml` file to setup your environment variables (see "Configuration" section)
+1. `docker-compose up`
+1. Go to http://localhost:3030 to make sure blindtester is up and running
 
 #### Heroku
 
-1. Create a new app on heroku (e.g. `MY_APP`)
+1. Create a new app with a pipeline on heroku (e.g. `MY_APP`)
 1. `heroku login`
 1. `heroku stack:set container --app MY_APP`
 1. `heroku git:remote --app MY_APP`
 1. `git push heroku master`
+1. Go to https://dashboard.heroku.com/apps/MY_APP/settings to setup your environment variables (see "Configuration" section)
+1. Go to https://MY_APP.herokuapp.com to make sure blindtester is up and running
 
 ### Configuration
 
