@@ -1,6 +1,6 @@
 const config = require('../../config');
 
-module.exports = function (app) {
+module.exports = (app) => {
   if (config.endpoint.save.enabled) {
     app.configure(require('./save'));
   }

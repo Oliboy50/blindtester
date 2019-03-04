@@ -63,7 +63,30 @@ cp docker-compose.local.yaml docker-compose.override.yaml
 
 # edit docker-compose.override.yaml file to setup your environment variables and uncomment the last lines of the file to run in "development" environment
 
+# download "node_modules" locally for a better developer experience (smarter IDE, fix lint on commit, etc.)
+cd api && npm install && cd -
+
 docker-compose up
+```
+
+### Lint
+
+If you've run `npm install` locally (outside of the container running the app), you should already have the "fix lint on commit" feature available.
+
+If you want to lint your code manually:
+
+```shell
+# while docker-compose is up
+
+docker-compose exec api npm run lint:fix
+```
+
+### Test
+
+```shell
+# while docker-compose is up
+
+docker-compose exec api npm run test
 ```
 
 ### Project pieces

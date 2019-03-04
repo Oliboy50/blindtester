@@ -6,7 +6,7 @@ const { FILES_STORAGE_TYPE_BACKBLAZEB2 } = require('../../config/const');
 const { addAuthenticatedSlackTeam } = require('../core/database');
 const { getFileDataForUrl } = require('../core/fileFinder');
 
-module.exports = function (app) {
+module.exports = (app) => {
   app.use('/slack-oauth-slack-button', {
     async find({ query }) {
       if (config.slack.slackButtonState && (query.state !== config.slack.slackButtonState)) {
@@ -91,10 +91,10 @@ Examples:
         const difficulty = matchedParams[2] || matchedParams[3];
         const date = matchedParams[4] || matchedParams[5];
 
-        // always prefer file.url instead of stream
         let urlToAudioFile;
-        if (file.type === FILES_STORAGE_TYPE_BACKBLAZEB2) {
-          urlToAudioFile = file.url;
+        // always prefer direct storage url when possible
+        if (file.storage.type === FILES_STORAGE_TYPE_BACKBLAZEB2) {
+          urlToAudioFile = file.storage.url;
         } else {
           urlToAudioFile = `${config.apiBaseUrl}/stream/${file.id}`;
         }

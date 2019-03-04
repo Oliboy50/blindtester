@@ -11,8 +11,12 @@ jobs:
       - run:
           name: install
           command: |
-            docker-compose -f docker-compose.yaml -f docker-compose.local.yaml -f docker-compose.ci.yaml up -d
+            docker-compose -f docker-compose.yaml -f docker-compose.local.yaml -f docker-compose.local.ci.yaml up -d
       - run:
           name: lint
           command: |
             docker-compose exec api npm run lint
+      - run:
+          name: test
+          command: |
+            docker-compose exec api npm run test

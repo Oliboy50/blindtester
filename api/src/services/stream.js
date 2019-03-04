@@ -3,7 +3,7 @@ const { NotFound, Unavailable } = require('@feathersjs/errors');
 const { FILES_STORAGE_TYPE_FILESYSTEM, FILES_STORAGE_TYPE_BACKBLAZEB2 } = require('../../config/const');
 const { getFiles } = require('../core/database');
 
-module.exports = function (app) {
+module.exports = (app) => {
   app.use('/stream/:id', async (req, res) => {
     const id = req.params.id;
     const file = (await getFiles()).find((file) => file.id === id);

@@ -31,4 +31,12 @@ module.exports = {
       'always-multiline',
     ],
   },
+  overrides: [
+    {
+      files: ['*.test.js', '*.e2e-test.js'],
+      env: {
+        jest: true,
+      },
+    },
+  ],
 };
