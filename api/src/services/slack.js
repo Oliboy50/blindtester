@@ -54,7 +54,7 @@ module.exports = (app) => {
   });
 
   app.use('/slack-command', {
-    async create({ token, text, response_url, user_name }) {
+    async create({ token, text, response_url, user_name, command }) {
       if (config.slack.verificationToken && (token !== config.slack.verificationToken)) {
         return new Forbidden('Slack verification token is invalid');
       }
@@ -78,11 +78,11 @@ module.exports = (app) => {
           response_type: 'ephemeral',
           text: `Paste a YouTube video URL and optionally include difficulty and/or date information.
 Examples:
-/blindtest https://www.youtube.com/watch?v=dQw4w9WgXcQ
-/blindtest https://www.youtube.com/watch?v=dQw4w9WgXcQ :egg: 1992
-/blindtest https://www.youtube.com/watch?v=dQw4w9WgXcQ "difficulty wrapped in double quotes" "date wrapped in double quotes"
-/blindtest https://www.youtube.com/watch?v=dQw4w9WgXcQ "only difficulty"
-/blindtest https://www.youtube.com/watch?v=dQw4w9WgXcQ "" "only date"
+${command} https://www.youtube.com/watch?v=dQw4w9WgXcQ
+${command} https://www.youtube.com/watch?v=dQw4w9WgXcQ :egg: 1992
+${command} https://www.youtube.com/watch?v=dQw4w9WgXcQ "difficulty wrapped in double quotes" "date wrapped in double quotes"
+${command} https://www.youtube.com/watch?v=dQw4w9WgXcQ "only difficulty"
+${command} https://www.youtube.com/watch?v=dQw4w9WgXcQ "" "only date"
 `,
         };
       }
@@ -91,13 +91,10 @@ Examples:
         const difficulty = matchedParams[2] || matchedParams[3];
         const date = matchedParams[4] || matchedParams[5];
 
-        let urlToAudioFile;
         // always prefer direct storage url when possible
-        if (file.storage.type === FILES_STORAGE_TYPE_BACKBLAZEB2) {
-          urlToAudioFile = file.storage.url;
-        } else {
-          urlToAudioFile = `${config.apiBaseUrl}/stream/${file.id}`;
-        }
+        const urlToAudioFile = file.storage.type === FILES_STORAGE_TYPE_BACKBLAZEB2
+          ? file.storage.url
+          : `${config.apiBaseUrl}/stream/${file.id}`;
 
         // send response to response_url to avoid showing original slash command message
         axios.post(response_url, {
@@ -133,7 +130,7 @@ Examples:
         attachments: [
           {
             color: 'good',
-            text: `Success! I'll post back this blind test in a few seconds :)`,
+            text: `Success! I'll post back your blind test in a few seconds :smile_cat:`,
           },
         ],
       };

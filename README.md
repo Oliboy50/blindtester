@@ -32,7 +32,7 @@ Configuration is done using environment variables (some good defaults can be fou
 | Variable    | Description |
 |:-----------:|-------------|
 | PORT | Port on which the web server will listen (default value is `3030`) |
-| API_BASE_URL | WebApp base URL displayed to end users |
+| API_BASE_URL | Your blindtester installation base URL used to programmatically build links (example: `http://localhost:3030`) |
 | ENDPOINT_SAVE_ENABLED | If equals to `true`, the API will expose the `save` endpoint |
 | ENDPOINT_STREAM_ENABLED | If equals to `true`, the API will expose the `stream` endpoint |
 | ENDPOINT_SLACK_ENABLED | If equals to `true`, the API will expose special endpoints to be compatible with Slack. |
@@ -53,6 +53,26 @@ Configuration is done using environment variables (some good defaults can be fou
 | SLACK_CLIENT_SECRET | Used if `ENDPOINT_SLACK_ENABLED` is `true`. Your Slack application "Client Secret". |
 | SLACK_VERIFICATION_TOKEN | Used if `ENDPOINT_SLACK_ENABLED` is `true`. If defined, this value must match your Slack application "Verification Token" to make sure incoming requests come from your Slack application. More information: [Slack verification token](https://api.slack.com/docs/token-types#verification) |
 | SLACK_SLACK_BUTTON_STATE | Used if `ENDPOINT_SLACK_ENABLED` is `true`. If defined, this value must be the same as the `state` query param used in the request used to distribute your Slack application in a Slack workspace (e.g. `https://slack.com/oauth/authorize?client_id=YOUR_SLACK_CLIENT_ID&scope=commands&state=YOUR_SLACK_SLACK_BUTTON_STATE`). More information: [Slack button](https://api.slack.com/docs/slack-button) |
+
+### Third party integrations
+
+#### Slack
+
+In order to be easily used in Slack, blindtester provides special endpoints.
+
+Here's how to create a blindtester Slack application:
+
+1. Configure `ENDPOINT_SLACK_ENABLED` blindtester variable to expose Slack endpoints
+1. [Create a Slack App](https://api.slack.com/apps) from your workspace
+1. Create a `Slash Command` for your app where `Request URL` will point to the `API_BASE_URL/slack-command` endpoint of your blindtester installation and `Escape channels, users, and links sent to your app` will be checked
+1. `Install App` to your workspace
+
+If you want to distribute your application to other workspaces:
+
+1. Configure `SLACK_CLIENT_ID` and `SLACK_CLIENT_SECRET` blindtester variables using your Slack application credentials
+1. Add a `Redirect URL` which will point to the `API_BASE_URL/slack-oauth-slack-button` endpoint of your blindtester installation
+1. `Activate Public Distribution`
+1. Use your `Add to Slack` button to install the app to other workspaces
 
 ## Developer documentation
 
@@ -94,3 +114,7 @@ docker-compose exec api npm run test
 #### API
 
 Developed on top of [Feathers](https://feathersjs.com)
+
+### License
+
+GPLv3 - See [LICENSE.md](LICENSE.md) file.
