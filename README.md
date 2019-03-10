@@ -25,6 +25,16 @@
 1. Go to https://dashboard.heroku.com/apps/MY_APP/settings to setup your environment variables
 1. Go to https://MY_APP.herokuapp.com to make sure blindtester is up and running
 
+### Usage
+
+#### GET `/save?url=YOUR_VIDEO_URL`
+
+Produce a new blind test using the `url` query param, then redirect to the blind test.
+
+#### GET `/stream/BLIND_TEST_ID`
+
+Listen to the given blind test id.
+
 ### Configuration
 
 Configuration is done using environment variables (some good defaults can be found in [docker-compose.local.yaml](docker-compose.local.yaml)) which are listed below:
@@ -109,12 +119,6 @@ docker-compose exec api npm run lint:fix
 docker-compose exec api npm run test
 ```
 
-### Project pieces
-
-#### API
-
-Developed on top of [Feathers](https://feathersjs.com)
-
-### License
+## License
 
 GPLv3 - See [LICENSE.md](LICENSE.md) file.

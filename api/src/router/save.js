@@ -1,0 +1,23 @@
+const router = require('express').Router();
+const { getFileDataForUrl } = require('../core/fileFinder');
+const { getListeningUrlForFile } = require('../core/urlFinder');
+
+router.get('/save', async (req, res, next) => {
+  try {
+    const url = req.query.url;
+    // @TODO make sure url is valid (see slack URL matcher)
+    if (!url) {
+      return res.status(400).json({
+        message: 'Missing required query params "url"',
+      });
+    }
+
+    const file = await getFileDataForUrl(url);
+
+    return res.redirect(301, await getListeningUrlForFile(file));
+  } catch (e) {
+    next(e);
+  }
+});
+
+module.exports = router;
