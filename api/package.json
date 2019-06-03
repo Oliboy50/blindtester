@@ -20,7 +20,7 @@
     "test:e2e": "jest --config ./jest.e2e-config.js"
   },
   "dependencies": {
-    "axios": "0.18.0",
+    "axios": "0.19.0",
     "axios-retry": "3.1.2",
     "compression": "1.7.3",
     "cors": "2.8.5",
