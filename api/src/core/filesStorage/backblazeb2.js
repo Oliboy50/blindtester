@@ -39,4 +39,13 @@ module.exports = {
       url: `${authorizeAccountData.downloadUrl}/b2api/v2/b2_download_file_by_id?fileId=${uploadData.fileId}`,
     };
   },
+  async isValidFileStorage({ url }) {
+    if (!url) {
+      return false;
+    }
+
+    // @TODO check if url is OK
+
+    return true;
+  },
 };

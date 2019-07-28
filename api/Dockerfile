@@ -1,4 +1,4 @@
-FROM node:11.9.0-alpine
+FROM node:12.7.0-alpine
 
 ENV PORT=3030
 ENV NODE_APP_DIR=/home/node/app
@@ -17,7 +17,7 @@ RUN apk add --no-cache \
       curl \
       ffmpeg \
       python \
-    && curl -L https://yt-dl.org/downloads/2019.07.02/youtube-dl -o /usr/local/bin/youtube-dl \
+    && curl -L https://yt-dl.org/downloads/2019.07.27/youtube-dl -o /usr/local/bin/youtube-dl \
     && chmod a+rx /usr/local/bin/youtube-dl \
     && npm install -g npm@6.8.0
 
