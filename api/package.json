@@ -25,18 +25,18 @@
     "compression": "1.7.4",
     "cors": "2.8.5",
     "express": "4.17.1",
-    "helmet": "3.18.0",
+    "helmet": "3.21.2",
     "memory-cache": "0.2.0",
     "mkdirp": "0.5.1",
-    "uniqid": "5.0.3"
+    "uniqid": "5.1.0"
   },
   "devDependencies": {
-    "eslint": "5.16.0",
-    "husky": "2.4.0",
-    "jest": "24.8.0",
-    "lint-staged": "8.2.0",
-    "nodemon": "1.19.1",
-    "supertest": "3.4.2"
+    "eslint": "6.7.0",
+    "husky": "3.1.0",
+    "jest": "24.9.0",
+    "lint-staged": "9.4.3",
+    "nodemon": "2.0.1",
+    "supertest": "4.0.2"
   },
   "husky": {
     "hooks": {
