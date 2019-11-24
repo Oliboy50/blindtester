@@ -25,7 +25,7 @@ module.exports = {
         {
           stdio: 'ignore',
           detached: true,
-        }
+        },
       );
 
       extractionCommand.on('error', (err) => {

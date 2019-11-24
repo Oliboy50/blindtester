@@ -37,12 +37,12 @@ module.exports = {
     const remoteDatabase = await downloadFileByName(
       authorizeAccountData.downloadUrl,
       config.database[DATABASE_TYPE_JSON][DATABASE_JSON_TYPE_BACKBLAZEB2].bucketName,
-      config.database[DATABASE_TYPE_JSON][DATABASE_JSON_TYPE_BACKBLAZEB2].fileName
+      config.database[DATABASE_TYPE_JSON][DATABASE_JSON_TYPE_BACKBLAZEB2].fileName,
     );
     if (remoteDatabase) {
       return cache.put(
         CACHE_DATABASE_KEY,
-        remoteDatabase
+        remoteDatabase,
       );
     }
 
@@ -72,7 +72,7 @@ module.exports = {
         null,
         2,
       ),
-      config.database[DATABASE_TYPE_JSON][DATABASE_JSON_TYPE_BACKBLAZEB2].fileName
+      config.database[DATABASE_TYPE_JSON][DATABASE_JSON_TYPE_BACKBLAZEB2].fileName,
     );
 
     if (uploadData.action !== 'upload') {

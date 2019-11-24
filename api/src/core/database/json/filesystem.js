@@ -22,12 +22,12 @@ module.exports = {
     }
 
     const filesystemDatabase = JSON.parse(
-      await readFile(config.database[DATABASE_TYPE_JSON][DATABASE_JSON_TYPE_FILESYSTEM].path)
+      await readFile(config.database[DATABASE_TYPE_JSON][DATABASE_JSON_TYPE_FILESYSTEM].path),
     );
     if (filesystemDatabase) {
       return cache.put(
         CACHE_DATABASE_KEY,
-        filesystemDatabase
+        filesystemDatabase,
       );
     }
 
