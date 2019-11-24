@@ -27,7 +27,7 @@ module.exports = {
       getUploadUrlData.authorizationToken,
       await readFile(filePath),
       basename(filePath),
-      'audio/mpeg'
+      'audio/mpeg',
     );
 
     if (uploadData.action !== 'upload') {

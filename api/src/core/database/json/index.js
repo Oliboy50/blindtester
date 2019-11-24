@@ -19,8 +19,8 @@ const saveFiles = async (files) => {
       await getDatabase(),
       {
         [DATABASE_KEY_FILES]: files,
-      }
-    )
+      },
+    ),
   );
 };
 
@@ -42,8 +42,8 @@ const addAuthenticatedSlackTeam = async (team) => {
       await getDatabase(),
       {
         [DATABASE_KEY_AUTHENTICATED_SLACK_TEAMS]: teams,
-      }
-    )
+      },
+    ),
   );
 };
 

@@ -40,7 +40,7 @@ router.get('/slack-oauth-slack-button', async (req, res, next) => {
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
           },
-        }
+        },
       )).data;
     } catch (e) {
       const errMessage = `[slack] "oauth.access" failed`;
@@ -99,7 +99,7 @@ router.post('/slack-command', async (req, res, next) => {
           /(?: (?:"(.*?)"|(\S+)))?/, // optional difficulty
           /(?: (?:"(.*?)"|(\S+)))?/, // optional date
           /$/,
-        ].map(r => r.source).join(''))
+        ].map(r => r.source).join('')),
       );
     } catch (e) {} // eslint-disable-line no-empty
 
