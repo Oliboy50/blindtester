@@ -17,7 +17,7 @@ RUN apk add --no-cache \
       curl \
       ffmpeg \
       python \
-    && curl -L https://yt-dl.org/downloads/2020.01.01/youtube-dl -o /usr/local/bin/youtube-dl \
+    && curl -L https://yt-dl.org/downloads/2020.03.01/youtube-dl -o /usr/local/bin/youtube-dl \
     && chmod a+rx /usr/local/bin/youtube-dl \
     && npm install -g npm@6.13.6
 
