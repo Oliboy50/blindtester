@@ -34,21 +34,21 @@ module.exports = {
     return EMPTY_DATABASE;
   },
   setDatabase: async (data) => {
-    mkdirp(path.dirname(config.database[DATABASE_TYPE_JSON][DATABASE_JSON_TYPE_FILESYSTEM].path), async (err) => {
-      if (err) {
-        // eslint-disable-next-line no-console
-        console.log(`Unable to create database directory [${path.dirname(config.database[DATABASE_TYPE_JSON][DATABASE_JSON_TYPE_FILESYSTEM].path)}]`, err);
-        throw new Error('Unable to create database directory');
-      }
+    try {
+      await mkdirp(path.dirname(config.database[DATABASE_TYPE_JSON][DATABASE_JSON_TYPE_FILESYSTEM].path));
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.log(`Unable to create database directory [${path.dirname(config.database[DATABASE_TYPE_JSON][DATABASE_JSON_TYPE_FILESYSTEM].path)}]`, err);
+      throw new Error('Unable to create database directory');
+    }
 
-      await writeFile(
-        config.database[DATABASE_TYPE_JSON][DATABASE_JSON_TYPE_FILESYSTEM].path,
-        JSON.stringify(
-          cache.put(CACHE_DATABASE_KEY, data),
-          null,
-          2,
-        ),
-      );
-    });
+    await writeFile(
+      config.database[DATABASE_TYPE_JSON][DATABASE_JSON_TYPE_FILESYSTEM].path,
+      JSON.stringify(
+        cache.put(CACHE_DATABASE_KEY, data),
+        null,
+        2,
+      ),
+    );
   },
 };
