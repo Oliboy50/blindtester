@@ -22,7 +22,7 @@ RUN apk add --no-cache \
 
 COPY package*.json ./
 
-RUN npm install
+RUN npm ci
 
 COPY . .
 
