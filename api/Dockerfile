@@ -7,6 +7,7 @@ ENV NODE_ENV=${SET_DEVELOPMENT_NODE_ENV:+development}
 ENV NODE_ENV=${NODE_ENV:-production}
 ARG SET_NPM_UNSAFE_PERM_TRUE
 ENV SET_NPM_UNSAFE_PERM_TRUE=${SET_NPM_UNSAFE_PERM_TRUE}
+ENV YOUTUBE_DL_VERSION=2020.05.03
 
 WORKDIR $NODE_APP_DIR
 
@@ -17,7 +18,7 @@ RUN apk add --no-cache \
       curl \
       ffmpeg \
       python \
-    && curl -L https://yt-dl.org/downloads/2020.05.03/youtube-dl -o /usr/local/bin/youtube-dl \
+    && curl -L https://yt-dl.org/downloads/${YOUTUBE_DL_VERSION}/youtube-dl -o /usr/local/bin/youtube-dl \
     && chmod a+rx /usr/local/bin/youtube-dl
 
 COPY package*.json ./
