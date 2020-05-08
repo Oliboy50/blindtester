@@ -1,4 +1,4 @@
-FROM node:12.16.1-alpine
+FROM node:12.16.3-alpine
 
 ENV PORT=3030
 ENV NODE_APP_DIR=/home/node/app
