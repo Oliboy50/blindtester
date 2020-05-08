@@ -1,9 +1,8 @@
 {
-  "automerge": false,
-  "ignoreUnstable": true,
+  "enabledManagers": ["regex"],
   "regexManagers": [
     {
-      "fileMatch": ["^Dockerfile$"],
+      "fileMatch": ["^api/Dockerfile$"],
       "matchStrings": ["ENV YOUTUBE_DL_VERSION=(?<currentValue>.*?)\n"],
       "datasourceTemplate": "github-tags",
       "depNameTemplate": "ytdl-org/youtube-dl"
