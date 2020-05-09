@@ -4,7 +4,7 @@ if (![FILES_STORAGE_TYPE_FILESYSTEM, FILES_STORAGE_TYPE_BACKBLAZEB2].includes(pr
   throw new Error('Invalid "FILES_STORAGE_TYPE" environment variable value');
 }
 
-if (!process.env.FILES_STORAGE_FILESYSTEM_PATH) {
+if (process.env.FILES_STORAGE_TYPE === FILES_STORAGE_TYPE_FILESYSTEM && !process.env.FILES_STORAGE_FILESYSTEM_PATH) {
   throw new Error('Invalid "FILES_STORAGE_FILESYSTEM_PATH" environment variable value');
 }
 

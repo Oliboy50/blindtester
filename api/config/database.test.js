@@ -8,6 +8,7 @@ describe(`database config`, () => {
 
   it(`throws if DATABASE_TYPE is empty`, () => {
     process.env = {
+      ...process.env,
       DATABASE_TYPE: '',
     };
 
@@ -16,20 +17,17 @@ describe(`database config`, () => {
     }).toThrowError(`Invalid "DATABASE_TYPE"`);
   });
 
-  it(`throws if DATABASE_TYPE is invalid`, () => {
-    process.env = {
-      DATABASE_TYPE: 'invalid',
-    };
-
-    expect(() => {
-      require('./database');
-    }).toThrowError(`Invalid "DATABASE_TYPE"`);
-  });
-
   describe(`DATABASE_TYPE is ${DATABASE_TYPE_JSON}`, () => {
+    beforeEach(() => {
+      process.env = {
+        ...process.env,
+        DATABASE_TYPE: DATABASE_TYPE_JSON,
+      };
+    });
+
     it(`throws if DATABASE_JSON_TYPE is invalid`, () => {
       process.env = {
-        DATABASE_TYPE: DATABASE_TYPE_JSON,
+        ...process.env,
         DATABASE_JSON_TYPE: 'invalid',
       };
 
@@ -39,10 +37,16 @@ describe(`database config`, () => {
     });
 
     describe(`DATABASE_JSON_TYPE is ${DATABASE_JSON_TYPE_FILESYSTEM}`, () => {
+      beforeEach(() => {
+        process.env = {
+          ...process.env,
+          DATABASE_JSON_TYPE: DATABASE_JSON_TYPE_FILESYSTEM,
+        };
+      });
+
       it(`throws if DATABASE_JSON_FILESYSTEM_PATH is empty`, () => {
         process.env = {
-          DATABASE_TYPE: DATABASE_TYPE_JSON,
-          DATABASE_JSON_TYPE: DATABASE_JSON_TYPE_FILESYSTEM,
+          ...process.env,
           DATABASE_JSON_FILESYSTEM_PATH: '',
         };
 
@@ -53,8 +57,7 @@ describe(`database config`, () => {
 
       it(`returns database config`, () => {
         process.env = {
-          DATABASE_TYPE: DATABASE_TYPE_JSON,
-          DATABASE_JSON_TYPE: DATABASE_JSON_TYPE_FILESYSTEM,
+          ...process.env,
           DATABASE_JSON_FILESYSTEM_PATH: 'not empty',
         };
 
@@ -78,11 +81,21 @@ describe(`database config`, () => {
     });
 
     describe(`DATABASE_JSON_TYPE is ${DATABASE_JSON_TYPE_BACKBLAZEB2}`, () => {
+      beforeEach(() => {
+        process.env = {
+          ...process.env,
+          DATABASE_JSON_TYPE: DATABASE_JSON_TYPE_BACKBLAZEB2,
+        };
+      });
+
       it(`throws if DATABASE_JSON_BACKBLAZEB2_KEY_ID is empty`, () => {
         process.env = {
-          DATABASE_TYPE: DATABASE_TYPE_JSON,
-          DATABASE_JSON_TYPE: DATABASE_JSON_TYPE_BACKBLAZEB2,
+          ...process.env,
           DATABASE_JSON_BACKBLAZEB2_KEY_ID: '',
+          DATABASE_JSON_BACKBLAZEB2_APPLICATION_KEY: 'not empty',
+          DATABASE_JSON_BACKBLAZEB2_BUCKET_ID: 'not empty',
+          DATABASE_JSON_BACKBLAZEB2_BUCKET_NAME: 'not empty',
+          DATABASE_JSON_BACKBLAZEB2_FILE_NAME: 'not empty',
         };
 
         expect(() => {
@@ -92,10 +105,12 @@ describe(`database config`, () => {
 
       it(`throws if DATABASE_JSON_BACKBLAZEB2_APPLICATION_KEY is empty`, () => {
         process.env = {
-          DATABASE_TYPE: DATABASE_TYPE_JSON,
-          DATABASE_JSON_TYPE: DATABASE_JSON_TYPE_BACKBLAZEB2,
+          ...process.env,
           DATABASE_JSON_BACKBLAZEB2_KEY_ID: 'not empty',
           DATABASE_JSON_BACKBLAZEB2_APPLICATION_KEY: '',
+          DATABASE_JSON_BACKBLAZEB2_BUCKET_ID: 'not empty',
+          DATABASE_JSON_BACKBLAZEB2_BUCKET_NAME: 'not empty',
+          DATABASE_JSON_BACKBLAZEB2_FILE_NAME: 'not empty',
         };
 
         expect(() => {
@@ -105,11 +120,12 @@ describe(`database config`, () => {
 
       it(`throws if DATABASE_JSON_BACKBLAZEB2_BUCKET_ID is empty`, () => {
         process.env = {
-          DATABASE_TYPE: DATABASE_TYPE_JSON,
-          DATABASE_JSON_TYPE: DATABASE_JSON_TYPE_BACKBLAZEB2,
+          ...process.env,
           DATABASE_JSON_BACKBLAZEB2_KEY_ID: 'not empty',
           DATABASE_JSON_BACKBLAZEB2_APPLICATION_KEY: 'not empty',
           DATABASE_JSON_BACKBLAZEB2_BUCKET_ID: '',
+          DATABASE_JSON_BACKBLAZEB2_BUCKET_NAME: 'not empty',
+          DATABASE_JSON_BACKBLAZEB2_FILE_NAME: 'not empty',
         };
 
         expect(() => {
@@ -119,12 +135,12 @@ describe(`database config`, () => {
 
       it(`throws if DATABASE_JSON_BACKBLAZEB2_BUCKET_NAME is empty`, () => {
         process.env = {
-          DATABASE_TYPE: DATABASE_TYPE_JSON,
-          DATABASE_JSON_TYPE: DATABASE_JSON_TYPE_BACKBLAZEB2,
+          ...process.env,
           DATABASE_JSON_BACKBLAZEB2_KEY_ID: 'not empty',
           DATABASE_JSON_BACKBLAZEB2_APPLICATION_KEY: 'not empty',
           DATABASE_JSON_BACKBLAZEB2_BUCKET_ID: 'not empty',
           DATABASE_JSON_BACKBLAZEB2_BUCKET_NAME: '',
+          DATABASE_JSON_BACKBLAZEB2_FILE_NAME: 'not empty',
         };
 
         expect(() => {
@@ -134,8 +150,7 @@ describe(`database config`, () => {
 
       it(`throws if DATABASE_JSON_BACKBLAZEB2_FILE_NAME is empty`, () => {
         process.env = {
-          DATABASE_TYPE: DATABASE_TYPE_JSON,
-          DATABASE_JSON_TYPE: DATABASE_JSON_TYPE_BACKBLAZEB2,
+          ...process.env,
           DATABASE_JSON_BACKBLAZEB2_KEY_ID: 'not empty',
           DATABASE_JSON_BACKBLAZEB2_APPLICATION_KEY: 'not empty',
           DATABASE_JSON_BACKBLAZEB2_BUCKET_ID: 'not empty',
@@ -150,8 +165,7 @@ describe(`database config`, () => {
 
       it(`returns database config`, () => {
         process.env = {
-          DATABASE_TYPE: DATABASE_TYPE_JSON,
-          DATABASE_JSON_TYPE: DATABASE_JSON_TYPE_BACKBLAZEB2,
+          ...process.env,
           DATABASE_JSON_BACKBLAZEB2_KEY_ID: 'not empty',
           DATABASE_JSON_BACKBLAZEB2_APPLICATION_KEY: 'not empty',
           DATABASE_JSON_BACKBLAZEB2_BUCKET_ID: 'not empty',
