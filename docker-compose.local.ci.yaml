@@ -2,6 +2,13 @@ version: '3'
 
 services:
   api:
+    environment:
+      NODE_APP_DIR: /home/node/app
+      DATABASE_TYPE: json
+      DATABASE_JSON_TYPE: filesystem
+      DATABASE_JSON_FILESYSTEM_PATH: /home/node/app/data/database.json
+      FILES_STORAGE_TYPE: filesystem
+      FILES_STORAGE_FILESYSTEM_PATH: /home/node/app/data/audio
     build:
       args:
         SET_DEVELOPMENT_NODE_ENV: 1
