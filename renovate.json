@@ -8,5 +8,11 @@
       "depNameTemplate": "ytdl-org/youtube-dl",
       "versioningTemplate": "loose"
     }
+  ],
+  "packageRules": [
+    {
+      "managers": ["regex"],
+      "automerge": true
+    }
   ]
 }

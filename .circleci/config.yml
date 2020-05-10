@@ -18,4 +18,6 @@ jobs:
       - run:
           name: test
           command: |
+            docker-compose exec -u root api mkdir -p data/audio
+            docker-compose exec -u root api chown -R node:node data
             docker-compose exec api npm run test
