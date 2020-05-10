@@ -10,7 +10,7 @@
 
 #### Local
 
-1. `cp docker-compose.local.yaml docker-compose.override.yaml`
+1. `cp docker-compose.dev.yaml docker-compose.override.yaml`
 1. Edit `docker-compose.override.yaml` file to setup your environment variables
 1. `docker-compose up`
 1. Go to http://localhost:3030 to make sure blindtester is up and running
@@ -37,7 +37,7 @@ Listen to the given blind test id.
 
 ### Configuration
 
-Configuration is done using environment variables (some good defaults can be found in [docker-compose.local.yaml](docker-compose.local.yaml)) which are listed below:
+Configuration is done using environment variables (some good defaults can be found in [docker-compose.dev.yaml](docker-compose.dev.yaml)) which are listed below:
 
 | Variable    | Description |
 |:-----------:|-------------|
@@ -89,7 +89,7 @@ If you want to distribute your application to other workspaces:
 ### Start hacking
 
 ```shell
-cp docker-compose.local.yaml docker-compose.override.yaml
+cp docker-compose.dev.yaml docker-compose.override.yaml
 
 # edit docker-compose.override.yaml file to setup your environment variables and uncomment the last lines of the file to run in "development" environment
 

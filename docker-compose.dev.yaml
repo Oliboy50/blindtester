@@ -2,6 +2,12 @@ version: '3'
 
 services:
   api:
+    # use "root" user to avoid useless file permissions issues
+    user: root
+    build:
+      args:
+        SET_DEVELOPMENT_NODE_ENV: 1
+    command: npm run dev
     environment:
       PORT: 3030
       NODE_APP_DIR: /home/node/app
@@ -29,12 +35,8 @@ services:
     ports:
       - '3030:3030'
 
-    # uncomment all the remaining lines below if you want to run in "development" environment
+    # uncomment the following lines below if you want to update these files without having to rebuild your containers
 
-#    build:
-#      args:
-#        SET_DEVELOPMENT_NODE_ENV: 1
-#    command: npm run dev
 #    volumes:
 #      - ./api/src:/home/node/app/src
 #      - ./api/config:/home/node/app/config
