@@ -17,7 +17,6 @@ RUN test -z "$SET_NPM_UNSAFE_PERM_TRUE" || (npm config set unsafe-perm true) && 
 RUN apk add --no-cache \
       curl \
       ffmpeg \
-      python \
     && curl -L https://yt-dl.org/downloads/${YOUTUBE_DL_VERSION}/youtube-dl -o /usr/local/bin/youtube-dl \
     && chmod a+rx /usr/local/bin/youtube-dl
 
