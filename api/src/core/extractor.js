@@ -1,8 +1,9 @@
 const { resolve } = require('path');
 const { spawn } = require('child_process');
-const { ExtractionError } = require('./error');
 const config = require('../../config');
 const { FILES_STORAGE_TYPE_FILESYSTEM } = require('../../config/const');
+const { convertDurationFromTimecodeToNumberOfSeconds } = require('./durationConverter');
+const { ExtractionError } = require('./error');
 
 module.exports = {
   async extractAudioFileFromUrlAndReturnItsFilesystemPath(url, id) {
@@ -24,13 +25,13 @@ module.exports = {
           url,
         ],
         {
-          stdio: 'ignore',
+          stdio: ['ignore', 'ignore', 'ignore'],
           detached: true,
         },
       );
 
       extractionCommand.on('error', (err) => {
-        const errorMessage = `Audio file extraction failed for url [${url}] and id [${id}]. Error: ${err.message}`;
+        const errorMessage = `Failed to extract audio file for url [${url}] and id [${id}]. Error: ${err.message}`;
         // eslint-disable-next-line no-console
         console.log(errorMessage);
         reject(new ExtractionError(errorMessage));
@@ -38,7 +39,7 @@ module.exports = {
 
       extractionCommand.on('exit', (code) => {
         if (code !== 0) {
-          const errorMessage = `Exit code [${code}] for url [${url}] and id [${id}]`;
+          const errorMessage = `Audio file extraction exit code [${code}] for url [${url}] and id [${id}]`;
           // eslint-disable-next-line no-console
           console.log(errorMessage);
           reject(new ExtractionError(errorMessage));
@@ -50,5 +51,43 @@ module.exports = {
     });
 
     return `${audioFilePathWithoutExtension}.mp3`;
+  },
+  async getFileDurationInSecondsFromUrl(url) {
+    const durationAsTimecode = await new Promise((resolve, reject) => {
+      const extractionCommand = spawn(
+        'youtube-dl',
+        [
+          '--skip-download',
+          '--get-duration',
+          url,
+        ],
+        {
+          stdio: ['ignore', 'pipe', 'ignore'],
+          detached: true,
+        },
+      );
+
+      extractionCommand.stdout.on('data', (data) => {
+        resolve(String(data).replace(/\n/g, ''));
+      });
+
+      extractionCommand.on('error', (err) => {
+        const errorMessage = `Failed to compute file duration for url [${url}]. Error: ${err.message}`;
+        // eslint-disable-next-line no-console
+        console.log(errorMessage);
+        reject(new Error(errorMessage));
+      });
+
+      extractionCommand.on('exit', (code) => {
+        if (code !== 0) {
+          const errorMessage = `File duration computing exit code [${code}] for url [${url}]`;
+          // eslint-disable-next-line no-console
+          console.log(errorMessage);
+          reject(new Error(errorMessage));
+        }
+      });
+    });
+
+    return convertDurationFromTimecodeToNumberOfSeconds(durationAsTimecode);
   },
 };

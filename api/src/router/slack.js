@@ -3,6 +3,7 @@ const { stringify } = require('querystring');
 const axios = require('axios');
 const config = require('../../config');
 const { addAuthenticatedSlackTeam } = require('../core/database');
+const { FileDurationLimitExceededError } = require('../core/error');
 const { getFileDataForUrl } = require('../core/fileFinder');
 const { getListeningUrlForFile } = require('../core/urlFinder');
 
@@ -164,7 +165,15 @@ ${req.body.command} https://www.youtube.com/watch?v=dQw4w9WgXcQ "" "only date"
           });
         }
 
-        throw e;
+        return axios.post(req.body.response_url, {
+          response_type: 'ephemeral',
+          attachments: [
+            {
+              color: 'danger',
+              text: `Unknown error: ${JSON.stringify(e)}`,
+            },
+          ],
+        });
       })
     ;
 
@@ -179,6 +188,12 @@ ${req.body.command} https://www.youtube.com/watch?v=dQw4w9WgXcQ "" "only date"
       ],
     });
   } catch (e) {
+    if (e instanceof FileDurationLimitExceededError) {
+      return res.status(400).json({
+        message: `${e.name}: ${e.message}`,
+      });
+    }
+
     if (e instanceof Error) {
       return res.status(500).json({
         message: `${e.name}: ${e.message}`,

@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const { FileDurationLimitExceededError } = require('../core/error');
 const { getFileDataForUrl } = require('../core/fileFinder');
 const { getListeningUrlForFile } = require('../core/urlFinder');
 
@@ -16,6 +17,12 @@ router.get('/save', async (req, res, next) => {
 
     return res.redirect(301, await getListeningUrlForFile(file));
   } catch (e) {
+    if (e instanceof FileDurationLimitExceededError) {
+      return res.status(400).json({
+        message: `${e.name}: ${e.message}`,
+      });
+    }
+
     if (e instanceof Error) {
       return res.status(500).json({
         message: `${e.name}: ${e.message}`,
