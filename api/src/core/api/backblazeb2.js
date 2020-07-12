@@ -1,4 +1,6 @@
-const axios = require('axios').create();
+const axios = require('axios').create({
+  maxContentLength: Infinity,
+});
 const axiosRetry = require('axios-retry');
 const { getSha1FromBuffer } = require('../hasher');
 
