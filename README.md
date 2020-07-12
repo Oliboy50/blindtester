@@ -123,3 +123,4 @@ docker-compose exec api npm run test
 ## License
 
 GPLv3 - See [LICENSE.md](LICENSE.md) file.
+
