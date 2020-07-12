@@ -174,7 +174,7 @@ ${req.body.command} https://www.youtube.com/watch?v=dQw4w9WgXcQ "" "only date"
       attachments: [
         {
           color: 'good',
-          text: `Success! I'll post back your blind test in a few seconds :smile_cat:`,
+          text: `Success! Your blind test should appear within a few minutes :smile_cat:`,
         },
       ],
     });
