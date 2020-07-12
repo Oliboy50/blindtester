@@ -1,6 +1,14 @@
 const uniqid = require('uniqid');
-const { storeNewFileForUrlAndId, isValidFileStorage } = require('./filesStorage');
+const { storeFileAndReturnItsStorageInfo, isValidFileStorage } = require('./filesStorage');
 const { getFiles, saveFiles } = require('./database');
+const { FileNotFoundError } = require('./error');
+const { extractAudioFileFromUrlAndReturnItsFilesystemPath } = require('./extractor');
+
+const extractAudioFileFromUrlAndReturnStorageInfo = async (url, id) => {
+  return storeFileAndReturnItsStorageInfo(
+    await extractAudioFileFromUrlAndReturnItsFilesystemPath(url, id),
+  );
+};
 
 const findExistingFile = async (files, {id, url}) => {
   const matcherField = id ? 'id' : 'url';
@@ -15,7 +23,7 @@ const findExistingFile = async (files, {id, url}) => {
 
   if (!(await isValidFileStorage(file.storage))) {
     // replace existing file with a valid one
-    file.storage = await storeNewFileForUrlAndId(file.url, file.id);
+    file.storage = await extractAudioFileFromUrlAndReturnStorageInfo(file.url, file.id);
     files.splice(fileIndex, 1, file);
     await saveFiles(files);
   }
@@ -29,7 +37,7 @@ module.exports = {
 
     const existingFile = await findExistingFile(files, {id});
     if (!existingFile) {
-      throw new Error(`File with id ${id} was not found`);
+      throw new FileNotFoundError(`No file corresponding to "${id}"`);
     }
 
     return existingFile;
@@ -46,7 +54,7 @@ module.exports = {
     const file = {
       id,
       url,
-      storage: await storeNewFileForUrlAndId(url, id),
+      storage: await extractAudioFileFromUrlAndReturnStorageInfo(url, id),
     };
     files.push(file);
     await saveFiles(files);

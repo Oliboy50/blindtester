@@ -117,14 +117,14 @@ ${req.body.command} https://www.youtube.com/watch?v=dQw4w9WgXcQ "" "only date"
       });
     }
 
-    getFileDataForUrl(matchedParams[1]).then(async (file) => {
-      const difficulty = matchedParams[2] || matchedParams[3];
-      const date = matchedParams[4] || matchedParams[5];
+    getFileDataForUrl(matchedParams[1])
+      .then(async (file) => {
+        const difficulty = matchedParams[2] || matchedParams[3];
+        const date = matchedParams[4] || matchedParams[5];
 
-      const urlToAudioFile = await getListeningUrlForFile(file);
+        const urlToAudioFile = await getListeningUrlForFile(file);
 
-      // send response to response_url to avoid showing original slash command message
-      try {
+        // send response to response_url to avoid showing original slash command message
         await axios.post(req.body.response_url, {
           response_type: 'in_channel',
           attachments: [
@@ -150,11 +150,23 @@ ${req.body.command} https://www.youtube.com/watch?v=dQw4w9WgXcQ "" "only date"
             },
           ],
         });
-      } catch (e) {
-        // eslint-disable-next-line no-console
-        console.log(`[slack] "blindtest callback" failed`, e);
-      }
-    });
+      })
+      .catch(async (e) => {
+        if (e instanceof Error) {
+          return axios.post(req.body.response_url, {
+            response_type: 'ephemeral',
+            attachments: [
+              {
+                color: 'danger',
+                text: `${e.name}: ${e.message}`,
+              },
+            ],
+          });
+        }
+
+        throw e;
+      })
+    ;
 
     // send back ephemeral response to remove original slash command message
     return res.status(200).json({
@@ -167,6 +179,12 @@ ${req.body.command} https://www.youtube.com/watch?v=dQw4w9WgXcQ "" "only date"
       ],
     });
   } catch (e) {
+    if (e instanceof Error) {
+      return res.status(500).json({
+        message: `${e.name}: ${e.message}`,
+      });
+    }
+
     next(e);
   }
 });

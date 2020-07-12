@@ -5,12 +5,9 @@ const readFile = promisify(fs.readFile);
 const config = require('../../../config');
 const { FILES_STORAGE_TYPE_BACKBLAZEB2 } = require('../../../config/const');
 const { authorizeAccount, getUploadUrl, upload } = require('../api/backblazeb2');
-const { extractAudioFileFromUrlAndReturnItsFilesystemPath } = require('../extractor');
 
 module.exports = {
-  async storeNewFileForUrlAndId(url, id) {
-    const filePath = await extractAudioFileFromUrlAndReturnItsFilesystemPath(url, id);
-
+  async storeFileAndReturnItsStorageInfo(filePath) {
     const authorizeAccountData = await authorizeAccount(
       config.filesStorage[FILES_STORAGE_TYPE_BACKBLAZEB2].keyId,
       config.filesStorage[FILES_STORAGE_TYPE_BACKBLAZEB2].applicationKey,

@@ -1,5 +1,6 @@
 const { resolve } = require('path');
 const { spawn } = require('child_process');
+const { ExtractionError } = require('./error');
 const config = require('../../config');
 const { FILES_STORAGE_TYPE_FILESYSTEM } = require('../../config/const');
 
@@ -29,18 +30,18 @@ module.exports = {
       );
 
       extractionCommand.on('error', (err) => {
+        const errorMessage = `Audio file extraction failed for url [${url}] and id [${id}]. Error: ${err.message}`;
         // eslint-disable-next-line no-console
-        console.log(`Audio file extraction failed for url [${url}] and id [${id}]`, err);
-
-        reject(err);
+        console.log(errorMessage);
+        reject(new ExtractionError(errorMessage));
       });
 
       extractionCommand.on('exit', (code) => {
         if (code !== 0) {
+          const errorMessage = `Exit code [${code}] for url [${url}] and id [${id}]`;
           // eslint-disable-next-line no-console
-          console.log(`Exit code [${code}] for url [${url}] and id [${id}]`);
-
-          reject(code);
+          console.log(errorMessage);
+          reject(new ExtractionError(errorMessage));
           return;
         }
 

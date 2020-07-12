@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const { createReadStream } = require('fs');
 const { FILES_STORAGE_TYPE_FILESYSTEM, FILES_STORAGE_TYPE_BACKBLAZEB2 } = require('../../config/const');
+const { FileNotFoundError } = require('../core/error');
 const { getFileDataForId } = require('../core/fileFinder');
 
 router.get('/stream/:id', async (req, res) => {
@@ -9,8 +10,20 @@ router.get('/stream/:id', async (req, res) => {
   try {
     file = await getFileDataForId(id);
   } catch (e) {
-    return res.status(404).json({
-      message: `No file corresponding to "${id}"`,
+    if (e instanceof FileNotFoundError) {
+      return res.status(404).json({
+        message: `${e.name}: ${e.message}`,
+      });
+    }
+
+    if (e instanceof Error) {
+      return res.status(500).json({
+        message: `${e.name}: ${e.message}`,
+      });
+    }
+
+    return res.status(500).json({
+      message: JSON.stringify(e),
     });
   }
 
