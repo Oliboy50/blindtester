@@ -46,6 +46,7 @@ Configuration is done using environment variables (some good defaults can be fou
 | ENDPOINT_SAVE_ENABLED | If equals to `true`, the API will expose the `save` endpoint |
 | ENDPOINT_STREAM_ENABLED | If equals to `true`, the API will expose the `stream` endpoint |
 | ENDPOINT_SLACK_ENABLED | If equals to `true`, the API will expose special endpoints to be compatible with Slack. |
+| VALIDATE_MAX_FILE_DURATION_IN_SECONDS | If set, blindtester will make sure the file duration is less than this limit before downloading it. |
 | DATABASE_TYPE | Database type. Could be one of `json` (will store application data in a JSON object). |
 | DATABASE_JSON_TYPE | Used if `DATABASE_TYPE` is `json`. Could be one of `filesystem` |
 | DATABASE_JSON_FILESYSTEM_PATH | Used if `DATABASE_JSON_TYPE` is `filesystem`. Path to a readable/writable file which will be created (if it does not already exist) and used as database. |

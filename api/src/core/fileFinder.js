@@ -1,10 +1,18 @@
 const uniqid = require('uniqid');
+const config = require('../../config');
 const { storeFileAndReturnItsStorageInfo, isValidFileStorage } = require('./filesStorage');
 const { getFiles, saveFiles } = require('./database');
-const { FileNotFoundError } = require('./error');
-const { extractAudioFileFromUrlAndReturnItsFilesystemPath } = require('./extractor');
+const { FileDurationLimitExceededError, FileNotFoundError } = require('./error');
+const { extractAudioFileFromUrlAndReturnItsFilesystemPath, getFileDurationInSecondsFromUrl } = require('./extractor');
 
 const extractAudioFileFromUrlAndReturnStorageInfo = async (url, id) => {
+  if (config.validate.maxFileDurationInSeconds) {
+    const fileDurationInSeconds = await getFileDurationInSecondsFromUrl(url);
+    if (fileDurationInSeconds > config.validate.maxFileDurationInSeconds) {
+      throw new FileDurationLimitExceededError(`The video duration must be less than ${config.validate.maxFileDurationInSeconds} seconds.`);
+    }
+  }
+
   return storeFileAndReturnItsStorageInfo(
     await extractAudioFileFromUrlAndReturnItsFilesystemPath(url, id),
   );

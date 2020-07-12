@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const { createReadStream } = require('fs');
 const { FILES_STORAGE_TYPE_FILESYSTEM, FILES_STORAGE_TYPE_BACKBLAZEB2 } = require('../../config/const');
-const { FileNotFoundError } = require('../core/error');
+const { FileDurationLimitExceededError, FileNotFoundError } = require('../core/error');
 const { getFileDataForId } = require('../core/fileFinder');
 
 router.get('/stream/:id', async (req, res) => {
@@ -12,6 +12,12 @@ router.get('/stream/:id', async (req, res) => {
   } catch (e) {
     if (e instanceof FileNotFoundError) {
       return res.status(404).json({
+        message: `${e.name}: ${e.message}`,
+      });
+    }
+
+    if (e instanceof FileDurationLimitExceededError) {
+      return res.status(400).json({
         message: `${e.name}: ${e.message}`,
       });
     }
