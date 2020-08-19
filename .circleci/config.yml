@@ -3,7 +3,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: docker/compose:1.25.5
+      - image: docker/compose:1.26.2
     steps:
       - checkout
       - setup_remote_docker
