@@ -14,5 +14,6 @@
       "managers": ["regex"],
       "automerge": true
     }
-  ]
+  ],
+  "ignorePresets": ["github>whitesource/merge-confidence:beta"]
 }
