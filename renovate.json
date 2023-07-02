@@ -5,7 +5,7 @@
       "fileMatch": ["^api/Dockerfile$"],
       "matchStrings": ["ENV YOUTUBE_DL_VERSION=(?<currentValue>.*?)\n"],
       "datasourceTemplate": "github-tags",
-      "depNameTemplate": "ytdl-org/youtube-dl",
+      "depNameTemplate": "yt-dlp/yt-dlp",
       "versioningTemplate": "loose"
     }
   ],
